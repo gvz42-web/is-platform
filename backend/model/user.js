@@ -10,7 +10,8 @@ const userSchema = new mongoose.Schema({
     {
       test_id: String,
       score: Number,
-      exercises: [Number],
+      status: String,
+      exercises: [String],
       time_start: Date,
       time_end: Date,
     },

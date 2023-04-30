@@ -5,8 +5,12 @@ export default ($axios) => (resource) => ({
     return $axios.$get(`${resource}`)
   },
 
-  show(id, config) {
-    return $axios.$get(`${resource}/${id}`, config)
+  show(id) {
+    return $axios.$get(`${resource}/${id}`)
+  },
+
+  delete_test(id, testId) {
+    return $axios.$post(`${resource}/${id}/deletetest`, testId)
   },
 
   login(payload) {
@@ -27,8 +31,6 @@ export default ($axios) => (resource) => ({
       },
     })
 
-    console.log(tests)
-
     const result = []
 
     for (const test of tests) {
@@ -39,6 +41,9 @@ export default ($axios) => (resource) => ({
         test_id: userInfo.test_id,
         title: test.title,
         description: test.description,
+        max: test.max,
+        status: userInfo.status,
+        isFinished: !!userInfo.time_end,
       })
     }
 

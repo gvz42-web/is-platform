@@ -5,29 +5,65 @@
         <div v-html="task.data"></div>
       </div>
 
-      <div v-if="task.partType === 's'">
-        {{ task.data.text }}
+      <div v-if="task.partType === 'v'">
+        <StrongPassword v-if="task.data.option"/>
+      </div>
+
+      <div v-if="task.partType === 's'" class="choose">
+        <h2>{{ task.data.text }}</h2>
+        <div v-for="(option, index) in task.data.options" :key="index" class="option">
+          <vs-radio v-model="currentAnswer" :val="index">{{ option.text }}</vs-radio>
+        </div>
+      </div>
+
+      <div v-if="task.partType === 'm'">
+        <h2>{{ task.data.text }}</h2>
         <div v-for="(option, index) in task.data.options" :key="index">
-          <input v-model="currentAnswer" :name="index" :value="index" type="radio">
-          <label for="index">{{ option.text }}</label>
+          <vs-checkbox v-model="currentAnswers" :val="index">{{ option.text }}</vs-checkbox>
+        </div>
+      </div>
+
+      <div v-if="task.partType === 'o'">
+
+        <h2>{{ task.data.text }}</h2>
+
+
+        <div class="order">
+          <draggable :list="shuffled" class="list-group" group="people" @change="log">
+            <vs-alert v-for="(element, index) in shuffled"
+                      :key="index"
+                      class="list-group-item"
+                      gradient
+            >
+              <template #title>
+                {{ element.text }}
+              </template>
+
+            </vs-alert>
+          </draggable>
         </div>
       </div>
 
       <div class="control">
-        <button :disabled="isButtonDisabled" @click.prevent="submitTask">Далее</button>
+        <vs-button :disabled="isButtonDisabled" size="large" @click="submitTask">Далее</vs-button>
       </div>
     </div>
 
-    <Modal :opened="intro" :type="'submit'" title="Тест" @submit="intro = false">{{ module.description.full }}</Modal>
+    <Modal :opened="intro" :title="module.title" :type="'start'" @submit="intro = false">{{
+        module.description.full
+      }}
+    </Modal>
+
   </div>
 </template>
 
 <script>
 import Modal from "@/components/common/Modal";
+import StrongPassword from "@/components/user/visualizations/StrongPassword";
 
 export default {
   name: "Module",
-  components: {Modal},
+  components: {Modal, StrongPassword},
 
   props: ['module'],
   data() {
@@ -36,12 +72,14 @@ export default {
       moduleInfo: {},
       currentTask: 0,
       currentAnswer: '',
+      currentAnswers: [],
+      order: [],
+      shuffled: [],
       list: []
     }
   },
   computed: {
     task() {
-      console.log(this.module.list)
       const task = this.module.list[this.currentTask]
       if (task.partType === 't') {
         return task
@@ -53,9 +91,13 @@ export default {
       }
     },
     isButtonDisabled() {
-      if (this.module.list[this.currentTask].partType === 't') {
+      if (['t', 'v'].includes(this.module.list[this.currentTask].partType)) {
         return false
       } else if (this.currentAnswer !== '') {
+        return false
+      } else if (this.currentAnswers.length > 0) {
+        return false
+      } else if (this.module.list[this.currentTask].partType === 'o') {
         return false
       }
       return true
@@ -67,28 +109,51 @@ export default {
   methods: {
     submitTask() {
       const task = this.module.list[this.currentTask]
-      console.log(task)
       if (task.partType === "t") {
         this.list.push('t')
-      } else {
+      } else if (task.partType === "s") {
         this.list.push(this.currentAnswer)
+      } else if (task.partType === "m") {
+        this.list.push(this.currentAnswers)
+      } else if (task.partType === "o") {
+        this.list.push(this.shuffled)
       }
       if (this.currentTask === this.module.list.length - 1) {
-        const token = localStorage.getItem('authToken')
-        this.$userRepositoryUser.check_test({token, moduleId: this.module._id, result: this.list})
-        alert('Вы заершили тест!')
+        this.$userRepositoryUser.check_test({moduleId: this.module._id, result: this.list})
+        window.location.reload()
       } else {
         this.currentTask++
+        if (this.module.list[this.currentTask].partType === 'o') {
+          this.shuffled = this.shuffleArray(this.task.data.options)
+        }
       }
 
+
       this.currentAnswer = ''
+      this.currentAnswers = []
+    },
+    shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array
     }
-  }
+  },
+
 }
 </script>
 
 <style lang="sass" scoped>
 .part
+
+  .choose
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+
+    .option
+      margin: 6px 0
 
   .control
     display: flex
@@ -96,5 +161,18 @@ export default {
     justify-content: flex-end
     margin-top: 60px
 
-    button
+.order
+  display: flex
+  padding: 40px
+  border-radius: 20px
+
+.order
+  display: flex
+  flex-direction: column
+  padding: 40px
+
+
+  .list-group-item
+    margin: 10px 0
+
 </style>

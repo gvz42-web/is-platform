@@ -1,5 +1,4 @@
 const Module = require("../model/module");
-const { Types } = require("mongoose");
 
 exports.create_module = (req, res) => {
   console.log(req.body);
@@ -8,7 +7,7 @@ exports.create_module = (req, res) => {
       console.log(err);
     }
   });
-  res.send({ msg: "Hello man!" });
+  res.send({ msg: "Module has created" });
 };
 
 exports.get_modules = async (req, res) => {
@@ -35,14 +34,23 @@ exports.list_modules = async (req, res) => {
       console.log(err);
     });
 
-  console.log(modules);
+  const withMaxModules = modules.map((m) => {
+    return {
+      ...m._doc,
+      max: m.list.reduce(
+        (acc, curr) =>
+          acc + (!(curr.partType == "t" || curr.partType == "v") ? 1 : 0),
+        0
+      ),
+    };
+  });
 
-  res.send(modules);
+  res.send(withMaxModules);
 };
 
-exports.get_moduleInfo = async (req, res) => {
-  // TODO: get info
-};
+// exports.get_moduleInfo = async (req, res) => {
+//   // TODO: get info
+// };
 
 exports.get_module = async (req, res) => {
   const module = await Module.findById(req.params.id, (err) => {

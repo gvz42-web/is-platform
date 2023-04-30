@@ -12,12 +12,19 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['~assets/sass/vars', '~assets/sass/main'],
+  css: [
+    '~assets/sass/vars',
+    '~assets/sass/main',
+    'boxicons/css/boxicons.min.css',
+  ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/vuesax',
     '~/plugins/repository',
+    '~/plugins/axios.js',
     { src: '~/plugins/vue-good-table', ssr: false },
+    { src: '~/plugins/vuedraggable.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -39,6 +46,7 @@ export default {
   ],
 
   styleResources: {
+    css: [],
     sass: ['./assets/sass/*.sass'],
   },
 

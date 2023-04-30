@@ -1,22 +1,29 @@
 <template>
   <div class="table">
-    <button @click.prevent="modal.moduleEditor = true">Создать новый модуль</button>
+    <h1>Модули</h1>
+    <vs-button
+      color="rgb(59,222,200)"
+      gradient
+      size="large"
+      @click="modal.moduleEditor = true">Создать новый модуль
+    </vs-button>
     <vue-good-table
       ref="userTable"
       :columns="columns"
-      :rows="modules">
+      :rows="modules"
+      class="moduleTable">
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.label == 'Название'">
-            <span @click="openModuleCreator(props.row)">{{ props.row.title }}</span>
+            <h3 @click="openModuleCreator(props.row)">{{ props.row.title }}</h3>
           </span>
         <span v-if="props.column.label == 'Управление'">
             <ModuleControl :id="props.row._id"/>
           </span>
         <span v-if="props.column.label == 'Описание'">
-            {{ props.formattedRow['description.short'] }}
+            {{ props.row.description.admin }}
           </span>
         <span v-if="props.column.label == 'Теги'">
-            {{ props.formattedRow['module_tags'] }}
+            <Tags :tags="props.row.module_tags"/>
           </span>
       </template>
     </vue-good-table>
@@ -34,10 +41,11 @@
 import Modal from "@/components/common/Modal";
 import ModuleEditor from "@/components/admin/module/ModuleEditor";
 import ModuleControl from "@/components/admin/module/ModuleControl";
+import Tags from "@/components/admin/Tags";
 
 export default {
   name: "ModuleTable",
-  components: {ModuleControl, ModuleEditor, Modal},
+  components: {Tags, ModuleControl, ModuleEditor, Modal},
   props: ['modules'],
   data() {
     return {
@@ -84,6 +92,14 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="sass" scoped>
+h3
+  text-align: center
+  cursor: pointer
 
+  &:hover
+    color: #273982
+
+.moduleTable
+  margin-bottom: 40px
 </style>

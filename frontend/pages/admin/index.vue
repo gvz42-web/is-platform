@@ -1,6 +1,6 @@
 <template>
   <div>
-    Admin panel
+    <h1>Пользователи</h1>
     <UserTable :modules="modules" :users="users"/>
   </div>
 </template>

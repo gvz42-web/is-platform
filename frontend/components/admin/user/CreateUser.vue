@@ -1,6 +1,6 @@
 <template>
   <div class="create-user">
-    <span>Создание нового пользователя</span>
+    <h2>Создание нового пользователя</h2>
     <form>
       <label for="first_name">Имя: </label>
       <input v-model="user.first_name" name="first_name" type="text">
@@ -11,7 +11,7 @@
       <label for="password">Пароль: </label>
       <input v-model="user.password" name="password" type="text">
       <label for="tags">Теги: </label>
-      <input v-model="user.user_tags" name="tags" type="text">
+      <Tags :editable="true" :tags="user.user_tags" @delete="deleteTag" @new="addTag"/>
       <button @click.prevent="createUser">Создать пользователя</button>
     </form>
 
@@ -21,10 +21,11 @@
 
 <script>
 import UploadUsers from "@/components/admin/user/UploadUsers";
+import Tags from "@/components/admin/Tags";
 
 export default {
   name: 'CreateUser',
-  components: {UploadUsers},
+  components: {Tags, UploadUsers},
   data() {
     return {
       user: {
@@ -32,7 +33,7 @@ export default {
         last_name: '',
         email: '',
         password: '',
-        user_tags: ''
+        user_tags: []
       }
     }
   },
@@ -64,6 +65,12 @@ export default {
         user_tags: ''
       }
     },
+    addTag(tag) {
+      this.user.user_tags.push(tag)
+    },
+    deleteTag(tag) {
+      this.user.user_tags = this.user.user_tags.filter(t => t !== tag)
+    }
   }
 }
 </script>

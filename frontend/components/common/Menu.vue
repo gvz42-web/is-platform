@@ -1,9 +1,38 @@
 <template>
-  <div class="menu">
-    <a v-for="item of items" :key="items.indexOf(item)" :href="item.route" class="menu__item">
-      <img :src="item.icon" alt="">
-      <span>{{ item.name }}</span>
-    </a>
+
+  <div class="hidden">
+    <vs-sidebar
+      v-model="active"
+      hover-expand
+      open
+      reduce
+    >
+      <template #logo>
+        <!-- ...img logo -->
+      </template>
+      <vs-sidebar-item v-for="item of items" :id="item.id" :key="item.id" :to="item.route">
+        <template #icon>
+          <i :class="item.icon" class='bx'></i>
+        </template>
+        {{ item.name }}
+      </vs-sidebar-item>
+      <template #footer>
+        <vs-row justify="space-between">
+          <vs-avatar badge-color="danger" badge-position="top-right">
+            <i class='bx bx-bell'></i>
+
+            <template #badge>
+              28
+            </template>
+          </vs-avatar>
+
+          <vs-avatar>
+            <img alt=""
+                 src=""
+            ></vs-avatar>
+        </vs-row>
+      </template>
+    </vs-sidebar>
   </div>
 </template>
 
@@ -11,63 +40,43 @@
 export default {
   data() {
     return {
-      items: [
-        {
-          name: 'Домашняя страница',
-          icon: require('@/assets/img/icons/home.png'),
-          route: '/',
-          isActive: false,
-        },
-        {
-          name: 'Тесты',
-          icon: require('@/assets/img/icons/tests.png'),
-          route: '/tests',
-          isActive: false,
-        },
-      ],
+      active: 'home',
     }
   },
+  computed: {
+    items() {
+      if (this.$route.path.includes('/admin')) {
+        return [
+          {
+            name: 'Сотрудники',
+            icon: 'bx-male',
+            route: '/admin',
+            isActive: false,
+            id: 'workers'
+          },
+          {
+            name: 'Модули',
+            icon: 'bx-copy-alt',
+            route: '/admin/modules',
+            isActive: false,
+            id: 'modules'
+          },
+        ]
+      } else {
+        return [
+          {
+            name: 'Модули',
+            icon: 'bx-copy-alt',
+            route: '/',
+            isActive: false,
+            id: 'modules'
+          },
+        ]
+      }
+    }
+  }
 }
 </script>
 
 <style lang="sass">
-
-
-.menu
-  position: fixed
-  top: 0
-  bottom: 0
-  height: 100vh
-  left: 0
-  width: $menu-width
-  z-index: 1000
-  background-color: $primary-color
-  transition: width 0.1s linear
-  transition-delay: 0.2s
-
-  display: flex
-  flex-direction: column
-  align-items: center
-
-  &__item
-    display: flex
-    width: 260px
-
-    img
-      width: 40px
-
-    span
-      visibility: collapse
-      opacity: 0
-      transition: opacity 0.2s linear
-
-  &:hover
-    width: 300px
-
-    .menu__item
-      width: 260px
-
-      span
-        visibility: visible
-        opacity: 1
 </style>

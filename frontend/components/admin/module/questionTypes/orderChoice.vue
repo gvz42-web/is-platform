@@ -1,24 +1,23 @@
 <template>
-  <div class="single">
+  <div class="multiple">
     <form>
       <label for="text">Текст вопроса:</label>
-      <vs-input v-model="dataQ.text" class="question" name="text" placeholder="Текст вопроса"/>
+      <vs-input v-model="dataQ.text" class="question" placeholder="Текст вопроса"/>
       <span>Варианты ответа:</span>
       <div v-for="(option, index) of dataQ.options" :key="index" class="option">
-
-        <vs-radio v-model="dataQ.correct" :val="dataQ.options.indexOf(option)">
-          <vs-input v-model="option.text" :placeholder="`Вариант ответа ${index + 1}`" type="text"/>
-        </vs-radio>
+        <vs-input v-model="option.text" :placeholder="index+1" type="text"/>
       </div>
-
       <vs-button @click.prevent="dataQ.options.push({text: undefined})">Добавить вариант</vs-button>
     </form>
   </div>
 </template>
 
 <script>
+import draggable from 'vuedraggable'
+
 export default {
-  name: "SingleChoice",
+  name: "OrderChoice",
+  components: [draggable],
   props: ['edited_question'],
   data() {
     return {
@@ -29,13 +28,12 @@ export default {
             text: undefined
           }
         ],
-        correct: 0
       },
     }
   },
   watch: {
     dataQ: {
-      handler() {
+      handler(val) {
         this.$emit('update', JSON.stringify(this.dataQ))
       },
       deep: true
@@ -63,9 +61,10 @@ form
     margin: 10px 0
 
   .option
-    width: 100%
     display: flex
     flex-direction: row
     align-items: center
+    width: 100%
     margin: 6px 0
 </style>
+

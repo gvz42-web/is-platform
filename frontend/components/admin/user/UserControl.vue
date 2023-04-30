@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click.prevent="deleteUser">Удалить</button>
+    <vs-button danger @click.prevent="deleteUser">Удалить</vs-button>
   </div>
 </template>
 

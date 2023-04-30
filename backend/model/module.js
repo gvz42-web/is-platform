@@ -22,6 +22,7 @@ const moduleSchema = new mongoose.Schema({
       data: String,
     },
   ],
+  minimalScore: Number,
   module_tags: [String],
 });
 

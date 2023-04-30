@@ -5,12 +5,12 @@
       <div v-if="title" class="title"> {{ title }}</div>
       <div v-if="text" class="text"> {{ text }}</div>
       <slot></slot>
-      <div v-if="type == 'choice'">
-        <button @click.prevent="submit">Да</button>
-        <button @click.prevent="closeModal">Нет</button>
+      <div v-if="type == 'choice'" class="button">
+        <vs-button size="large" @click="submit">Да</vs-button>
+        <vs-button size="large" @click="closeModal">Нет</vs-button>
       </div>
-      <div v-if="type == 'submit'">
-        <button @click.prevent="submit">Начать</button>
+      <div v-if="type == 'start'">
+        <vs-button class="button" size="large" @click="submit">Начать</vs-button>
       </div>
     </div>
   </div>
@@ -62,8 +62,13 @@ export default {
     border-radius: 30px
     overflow: auto
     max-height: calc(100vh - 100px)
-
+    display: flex
+    flex-direction: column
+    align-items: center
     z-index: 2
+
+    .button
+      margin-top: 40px
 
     .title
       text-align: center

@@ -2,7 +2,7 @@
   <div class="item">
     <div class="item__title" @click="opened = !opened">
       Часть {{ n }}: {{ type }}
-      <button @click.prevent="$emit('deletePart')"> Удалить</button>
+      <vs-button danger @click.prevent="$emit('deletePart')"> Удалить</vs-button>
     </div>
     <div :class="{ 'hidden' : !opened }" class="item__content">
       <slot></slot>
@@ -23,18 +23,26 @@ export default {
 <style lang="sass" scoped>
 .item
   width: 100%
-  border: 1px solid black
+  border-radius: 10px
+  margin-bottom: 8px
+  padding: 8px 16px
   height: auto
 
   &__title
-    height: 40px
+    height: 50px
     display: flex
+    justify-content: space-between
     align-items: center
+
 
   &__content
     display: block
+    opacity: 1
+    padding: 10px
 
     &.hidden
       display: none
+      opacity: 0
+      transition: opacity 0.5s linear
 
 </style>

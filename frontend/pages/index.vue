@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1 v-if="!doTest">Модули</h1>
     <Module v-if="doTest" :module="openedTest"/>
     <TestsList v-else :tests="tests" @openTest="openTest"/>
   </div>
@@ -15,28 +16,20 @@ export default {
     return {
       user: {},
       tests: [],
-      me: '638fcc183c9aab5ca1a7cb29',
-      credentials: {
-        login: 'bubla@bar.ru',
-        password: '123456710',
-      },
       doTest: false,
-      openedTest: {}
+      openedTest: {},
+      active: false,
+      active2: true,
+      active3: false,
     }
   },
   async mounted() {
-
-    const token = localStorage.getItem("authToken")
-    if (!token) {
+    await this.$store.commit('auth/initialiseStore');
+    if (!this.$store.getters["auth/isSignedIn"]) {
       await this.$router.push('/login')
     } else {
-      const yourConfig = {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("authToken")
-        }
-      }
-      this.user = await this.$userRepositoryUser.show('638fcc183c9aab5ca1a7cb29', yourConfig).catch(err => {
-        console.log(err)
+      const userId = this.$store.getters["auth/getUserId"]
+      this.user = await this.$userRepositoryUser.show(userId).catch(err => {
         this.$router.push('/login')
       })
       this.tests = await this.$moduleRepositoryUser.showList(this.user.tests)
