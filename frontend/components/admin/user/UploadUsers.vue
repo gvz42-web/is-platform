@@ -1,15 +1,19 @@
 <template>
-  <div>
+  <div class="upload-block">
+    <h2>Загрузить пользователей из таблицы:</h2>
     <input
       accept=".xlsx"
       aria-label="upload image button"
       type="file"
       @change="onChange"
     />
+    <vs-button download="" href="/шаблон.xlsx" primary>Скачать шаблон таблицы</vs-button>
   </div>
 </template>
 
 <script>
+import {generatePassword} from "@/utils/utils";
+
 const XLSX = require('xlsx');
 export default {
   name: "UploadUsers",
@@ -29,14 +33,14 @@ export default {
           /* Convert array of arrays */
           const data = XLSX.utils.sheet_to_json(ws, {header: 1});
           const users = []
-          for (let i = 0; i < data.length; i++) {
+          for (let i = 1; i < data.length; i++) {
             const udata = data[i]
             const user = {
               first_name: udata[0],
               last_name: udata[1],
               email: udata[2],
-              password: udata[3],
-              user_tags: udata[4] ? udata[4].split(' ') : udata[4]
+              password: generatePassword(6),
+              user_tags: udata[4] ? udata[4].split(',') : udata[4]
             }
             users.push(user)
           }
@@ -50,6 +54,7 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="sass" scoped>
+.upload-block
+  margin-top: 80px
 </style>

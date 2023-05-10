@@ -1,7 +1,15 @@
 <template>
   <div class="create-module">
     <form>
-      <vs-input v-model="module.title" label-placeholder="Название"/>
+      <div class="image-upload">
+        <span>Обложка модуля:</span>
+        <div :style="{backgroundImage: `url(${ module.image })`}" class="image">
+          <label class="upload-background" for="file-upload"><i class='bx bx-images'></i></label>
+          <input id="file-upload" class="file-input" type="file" @change="handleFile">
+        </div>
+      </div>
+
+      <vs-input v-model="module.title" class="input" label-placeholder="Название"/>
       <label for="short_description">Краткое описание: </label>
       <textarea v-model="module.description.short" name="short_description"></textarea>
       <label for="full_description">Полное описание: </label>
@@ -50,11 +58,11 @@
 
       <div class="score">
         <div class="max">
-          <div>Максимальный балл:</div>
+          <div class="title">Максимальный балл:</div>
           <div>{{ maxScore }}</div>
         </div>
         <div class="minimal">
-          <span>Проходной балл</span>
+          <div class="title">Проходной балл</div>
           <vs-input v-model="module.minimalScore" inputmode="numeric" type="number"/>
         </div>
 
@@ -76,6 +84,8 @@ import MultipleChoice from "@/components/admin/module/questionTypes/multipleChoi
 import OrderChoice from "@/components/admin/module/questionTypes/orderChoice";
 import Vizualization from "@/components/admin/module/questionTypes/vizualization";
 
+const {compressImage} = require("@/utils/utils")
+
 export default {
   name: "ModuleEditor",
   components: {Vizualization, OrderChoice, MultipleChoice, Tags, SingleChoice, AccordionItem, 'editor': Editor},
@@ -84,13 +94,14 @@ export default {
     return {
       module: {
         title: '',
+        image: '',
         description: {
           short: '',
           full: '',
           admin: ''
         },
         list: [],
-        minimalScore: undefined,
+        minimalScore: 1,
         module_tags: [],
         ...this.edit_module
       },
@@ -101,7 +112,7 @@ export default {
         m: 'Вопрос (множественный выбор)',
         o: 'Последовательность',
       },
-      selectedType: 't'
+      selectedType: 't',
     }
   },
   computed: {
@@ -115,7 +126,7 @@ export default {
     maxScore() {
       let count = 0
       for (const item of this.module.list) {
-        if (!['v', 't'].includes(item.partType)) {
+        if (!['t'].includes(item.partType)) {
           count++
         }
       }
@@ -150,12 +161,60 @@ export default {
       if (index > -1) { // only splice array when item is found
         this.module.module_tags.splice(index, 1); // 2nd parameter means remove one item only
       }
+    },
+    async handleFile(event) {
+      const reader = new FileReader();
+      const compressedFile = await compressImage(event.target.files[0], {
+        quality: 0.5,
+        type: 'image/jpeg',
+      });
+      reader.readAsDataURL(compressedFile);
+      reader.onload = () => {
+        this.module.image = reader.result
+      };
     }
   }
 }
 </script>
 
 <style lang="sass" scoped>
+.image-upload
+  margin: 10px auto 10px
+
+  span
+    display: block
+    margin-bottom: 10px
+
+  &:hover
+    .upload-background
+      opacity: 1
+
+  .upload-background
+    display: flex
+    justify-content: center
+    align-items: center
+    width: 100%
+    height: 100%
+    background-color: rgba(21, 21, 21, 0.37)
+    opacity: 0
+    cursor: pointer
+    transition: opacity 0.3s
+
+    .bx
+      font-size: 40px
+      color: white
+
+.image
+  width: 300px
+  height: 200px
+  background-color: #808080
+  overflow: hidden
+  background-size: cover
+  margin: 0 auto 30px
+
+.file-input
+  display: none
+
 .score
   width: 100%
   display: flex
@@ -176,8 +235,7 @@ form
   align-items: flex-start
 
   input, textarea
-    width: 600px
-
+    width: 100%
     margin-bottom: 40px
 
   textarea
@@ -186,4 +244,12 @@ form
 .create-part
   display: flex
   margin-bottom: 30px
+
+.input
+  width: 100%
+
+  margin-bottom: 20px
+
+.title
+  margin-bottom: 10px
 </style>

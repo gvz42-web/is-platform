@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-cloak>
     <h1 v-if="!doTest">Модули</h1>
     <Module v-if="doTest" :module="openedTest"/>
     <TestsList v-else :tests="tests" @openTest="openTest"/>
@@ -31,6 +31,7 @@ export default {
       const userId = this.$store.getters["auth/getUserId"]
       this.user = await this.$userRepositoryUser.show(userId).catch(err => {
         this.$router.push('/login')
+        console.log(err)
       })
       this.tests = await this.$moduleRepositoryUser.showList(this.user.tests)
     }

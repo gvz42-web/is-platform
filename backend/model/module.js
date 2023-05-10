@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const moduleSchema = new mongoose.Schema({
   title: { type: String, default: "Модуль" },
+  image: String,
   description: {
     short: {
       type: String,

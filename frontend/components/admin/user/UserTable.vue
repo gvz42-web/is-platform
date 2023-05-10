@@ -146,6 +146,7 @@ export default {
         status: 'notCompleted'
       }
       await this.$userRepository.update(this.openedUser._id, {$push: {tests: test}})
+      this.openedUser.tests.push(test)
       this.$nuxt.refresh()
     },
     openUserCard(user) {

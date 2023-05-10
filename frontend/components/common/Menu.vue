@@ -26,10 +26,6 @@
             </template>
           </vs-avatar>
 
-          <vs-avatar>
-            <img alt=""
-                 src=""
-            ></vs-avatar>
         </vs-row>
       </template>
     </vs-sidebar>
@@ -40,7 +36,7 @@
 export default {
   data() {
     return {
-      active: 'home',
+      active: 'modules',
     }
   },
   computed: {

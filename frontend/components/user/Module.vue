@@ -6,7 +6,8 @@
       </div>
 
       <div v-if="task.partType === 'v'">
-        <StrongPassword v-if="task.data.option"/>
+        <StrongPassword v-if="task.data.option === 'password'" @complete="visualizationCompleted = true"/>
+        <PhishingEmail v-if="task.data.option === 'phishing'" @complete="visualizationCompleted = true"/>
       </div>
 
       <div v-if="task.partType === 's'" class="choose">
@@ -60,10 +61,11 @@
 <script>
 import Modal from "@/components/common/Modal";
 import StrongPassword from "@/components/user/visualizations/StrongPassword";
+import PhishingEmail from "@/components/user/visualizations/PhishingEmail";
 
 export default {
   name: "Module",
-  components: {Modal, StrongPassword},
+  components: {PhishingEmail, Modal, StrongPassword},
 
   props: ['module'],
   data() {
@@ -71,11 +73,12 @@ export default {
       intro: true,
       moduleInfo: {},
       currentTask: 0,
-      currentAnswer: '',
+      currentAnswer: 0,
       currentAnswers: [],
       order: [],
       shuffled: [],
-      list: []
+      list: [],
+      visualizationCompleted: false
     }
   },
   computed: {
@@ -91,14 +94,18 @@ export default {
       }
     },
     isButtonDisabled() {
-      if (['t', 'v'].includes(this.module.list[this.currentTask].partType)) {
+      if (this.module.list[this.currentTask].partType === 't') {
         return false
-      } else if (this.currentAnswer !== '') {
+      } else if (this.module.list[this.currentTask].partType === 's') {
         return false
       } else if (this.currentAnswers.length > 0) {
         return false
       } else if (this.module.list[this.currentTask].partType === 'o') {
         return false
+      } else if (this.module.list[this.currentTask].partType === 'v') {
+        if (this.visualizationCompleted) {
+          return false
+        }
       }
       return true
     }
@@ -128,9 +135,9 @@ export default {
         }
       }
 
-
-      this.currentAnswer = ''
+      this.currentAnswer = 0
       this.currentAnswers = []
+      this.visualizationCompleted = false
     },
     shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {

@@ -19,7 +19,24 @@
             <vs-button danger @click.prevent="deleteTest(props.row.test_id)">Удалить</vs-button>
           </span>
         <span v-if="props.column.label == 'Результат'">
-            {{ props.formattedRow['score'] + '/' + props.row['max'] }}
+
+          <vs-button v-if="props.row.status === 'completed'" success @click="0">
+            <span class="span">
+              Модуль пройден {{ props.formattedRow['score'] + '/' + props.row['max'] }}
+            </span>
+          </vs-button>
+
+          <vs-button v-if="props.row.status === 'failed'" danger @click="0">
+            <span class="span">
+              Модуль не пройден {{ props.formattedRow['score'] + '/' + props.row['max'] }}
+            </span>
+          </vs-button>
+
+          <vs-button v-if="props.row.status === 'notCompleted'" warn @click="0">
+            <span class="span">
+              Модуль ещё не пройден
+            </span>
+          </vs-button>
           </span>
       </template>
     </vue-good-table>

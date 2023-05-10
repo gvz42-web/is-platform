@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h2>Введите пароль: </h2>
     <vs-input v-model="password" class="input" placeholder="Пароль"/>
 
     <div class="info">
@@ -72,8 +73,10 @@
 </template>
 
 <script>
+
 export default {
   name: "StrongPassword",
+  components: {},
   data() {
     return {
       password: '',
@@ -91,6 +94,18 @@ export default {
     },
     count() {
       return ((this.info.numbers ? 10 : 0) + (this.info.lowerCase ? 26 : 0) + (this.info.upperCase ? 26 : 0) + (this.info.upperCase ? 26 : 0) + (this.info.symbols ? 33 : 0)) ** (this.password ? this.password.length : 1)
+    }
+  },
+  watch: {
+    password: {
+      handler() {
+        for (const item in this.info) {
+          if (!item) {
+            return false
+          }
+        }
+        this.$emit('complete')
+      }
     }
   }
 }
@@ -122,4 +137,6 @@ export default {
     margin-left: 20px
     font-size: 20px
 
+i
+  transition: all 0.3s
 </style>

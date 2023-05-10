@@ -24,6 +24,7 @@ export default {
   height: 100vh
   display: flex
   overflow-x: hidden
+  padding-bottom: 40px
 
   .content
     width: 100%

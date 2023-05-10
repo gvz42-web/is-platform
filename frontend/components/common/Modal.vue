@@ -9,7 +9,7 @@
         <vs-button size="large" @click="submit">Да</vs-button>
         <vs-button size="large" @click="closeModal">Нет</vs-button>
       </div>
-      <div v-if="type == 'start'">
+      <div v-if="type == 'start'" class="start">
         <vs-button class="button" size="large" @click="submit">Начать</vs-button>
       </div>
     </div>
@@ -66,6 +66,7 @@ export default {
     flex-direction: column
     align-items: center
     z-index: 2
+    max-width: 700px
 
     .button
       margin-top: 40px

@@ -37,6 +37,7 @@ export default ($axios) => (resource) => ({
       const userInfo = payload.filter((t) => t.test_id === test._id)[0]
       result.push({
         score: userInfo.score,
+        image: test.image,
         exercises: userInfo.exercises,
         test_id: userInfo.test_id,
         title: test.title,

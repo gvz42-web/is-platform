@@ -98,6 +98,7 @@ exports.check_test = async (req) => {
       exercises.push("t");
     } else if (part.partType === "v") {
       exercises.push("v");
+      score++;
     } else if (
       part.partType === "s" &&
       JSON.parse(part.data).correct === answer
@@ -120,12 +121,21 @@ exports.check_test = async (req) => {
       exercises.push("false");
     }
   }
+
+  let status = "";
+  if (module.minimalScore <= score) {
+    status = "completed";
+  } else {
+    status = "failed";
+  }
+
   await User.findOneAndUpdate(
     { token, tests: { $elemMatch: { test_id: moduleId } } },
     {
       $set: {
         "tests.$.exercises": exercises,
         "tests.$.score": score,
+        "tests.$.status": status,
         "tests.$.time_end": Date.now(),
       },
     },

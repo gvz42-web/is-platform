@@ -27,6 +27,11 @@ export default {
   margin-bottom: 8px
   padding: 8px 16px
   height: auto
+  cursor: pointer
+  transition: background-color 0.2s
+
+  &:hover
+    background-color: #c0c0c0
 
   &__title
     height: 50px

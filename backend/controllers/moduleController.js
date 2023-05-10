@@ -38,8 +38,7 @@ exports.list_modules = async (req, res) => {
     return {
       ...m._doc,
       max: m.list.reduce(
-        (acc, curr) =>
-          acc + (!(curr.partType == "t" || curr.partType == "v") ? 1 : 0),
+        (acc, curr) => acc + (!(curr.partType == "t") ? 1 : 0),
         0
       ),
     };
@@ -71,6 +70,7 @@ exports.delete_module = async (req, res) => {
 };
 
 exports.update_module = async (req, res) => {
+  console.log(req.body);
   await Module.findByIdAndUpdate(req.params.id, req.body);
   res.send(true);
 };

@@ -3,7 +3,7 @@
     <span class="title">Выберете визуализацию: </span>
     <vs-select v-model="dataQ.option" placeholder="Визуализация...">
       <vs-option label="Стойкость пароля" value="password">Стойкость пароля</vs-option>
-
+      <vs-option label="Определение фишингового письма" value="phishing">Определение фишингового письма</vs-option>
     </vs-select>
   </div>
 </template>
