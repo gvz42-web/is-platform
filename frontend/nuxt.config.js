@@ -2,13 +2,14 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'is-platform',
+    ssr: false,
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
-      { name: 'format-detection', content: 'telephone=no' },
+      {charset: 'utf-8'},
+      {name: 'viewport', content: 'width=device-width, initial-scale=1'},
+      {hid: 'description', name: 'description', content: ''},
+      {name: 'format-detection', content: 'telephone=no'},
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -23,8 +24,8 @@ export default {
     '~/plugins/vuesax',
     '~/plugins/repository',
     '~/plugins/axios.js',
-    { src: '~/plugins/vue-good-table', ssr: false },
-    { src: '~/plugins/vuedraggable.js' },
+    {src: '~/plugins/vue-good-table', ssr: false},
+    {src: '~/plugins/vuedraggable.js'},
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
