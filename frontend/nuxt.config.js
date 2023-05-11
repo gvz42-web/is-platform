@@ -53,7 +53,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'http://localhost:4001/',
+    baseURL: 'http://is-platform.space:4001/',
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
