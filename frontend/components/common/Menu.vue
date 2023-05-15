@@ -8,8 +8,13 @@
       reduce
     >
       <template #logo>
-        <!-- ...img logo -->
       </template>
+
+      <vs-sidebar-item>
+
+        {{ user.firstName + ' ' + user.lastName }}
+      </vs-sidebar-item>
+
       <vs-sidebar-item v-for="item of items" :id="item.id" :key="item.id" :to="item.route">
         <template #icon>
           <i :class="item.icon" class='bx'></i>
@@ -18,15 +23,15 @@
       </vs-sidebar-item>
       <template #footer>
         <vs-row justify="space-between">
-          <vs-avatar badge-color="danger" badge-position="top-right">
-            <i class='bx bx-bell'></i>
+          <!--          <vs-avatar badge-color="danger" badge-position="top-right">-->
+          <!--            <i class='bx bx-bell'></i>-->
 
-            <template #badge>
-              28
-            </template>
-          </vs-avatar>
-
+          <!--            <template #badge>-->
+          <!--              28-->
+          <!--            </template>-->
+          <!--          </vs-avatar>-->
         </vs-row>
+
       </template>
     </vs-sidebar>
   </div>
@@ -34,12 +39,16 @@
 
 <script>
 export default {
+  props: ["activeSidebar"],
   data() {
     return {
       active: 'modules',
     }
   },
   computed: {
+    user() {
+      return this.$store.getters['user/getUser']
+    },
     items() {
       if (this.$route.path.includes('/admin')) {
         return [
@@ -57,6 +66,13 @@ export default {
             isActive: false,
             id: 'modules'
           },
+          {
+            name: 'Управление',
+            icon: 'bx-copy-alt',
+            route: '/admin/settings',
+            isActive: false,
+            id: 'control'
+          },
         ]
       } else {
         return [
@@ -70,9 +86,13 @@ export default {
         ]
       }
     }
+  },
+  mounted() {
+    this.user = this.$store.getters['user/getUser']
   }
 }
 </script>
 
 <style lang="sass">
+
 </style>

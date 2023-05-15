@@ -32,10 +32,10 @@ export default {
     async login() {
       if (this.password.length > 0 && this.email.length > 0) {
 
-        await this.$userRepositoryUser.login({login: this.email, password: this.password}).then(async res => {
+        await this.$adminRepositoryControl.login({login: this.email, password: this.password}).then(async res => {
 
-          await this.$store.commit("auth/login", {token: res.token, userId: res.userId})
-          this.$router.push('/')
+          await this.$store.commit("authAdmin/login", {adminToken: res.token, adminId: res.adminId})
+          this.$router.push('/admin')
         }).catch(() => {
           this.$vs.notification({
             color: 'danger',
@@ -44,7 +44,6 @@ export default {
             text: 'Попробуйте ещё раз'
           })
         })
-        
       } else {
         this.$vs.notification({
           color: 'danger',

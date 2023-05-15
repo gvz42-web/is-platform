@@ -8,4 +8,6 @@ export default (ctx, inject) => {
 
   inject('userRepositoryUser', repositoryWithAxios('/user/user'))
   inject('moduleRepositoryUser', repositoryWithAxios('/user/module'))
+
+  inject('adminRepositoryControl', repositoryWithAxios('/admin/control'))
 }

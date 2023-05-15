@@ -62,7 +62,7 @@ exports.get_users = async (req, res) => {
 };
 
 exports.get_user = async (req, res) => {
-  const users = await User.findOne({ _id: req.params.id }, (err) => {
+  const user = await User.findOne({ _id: req.params.id }, (err) => {
     if (err) {
       console.log(err);
     }
@@ -71,7 +71,7 @@ exports.get_user = async (req, res) => {
     .catch(function (err) {
       console.log(err);
     });
-  res.send(users);
+  res.send(user);
 };
 
 exports.delete_user = async (req, res) => {

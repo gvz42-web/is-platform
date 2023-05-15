@@ -6,6 +6,18 @@ html, body
   margin: 0
   font-family: sans-serif
 
+.mobile
+  display: none
+
+  @media (max-width: 600px)
+    display: block !important
+
+.desktop
+
+  @media (max-width: 600px)
+    display: none !important
+
+
 .red
   background-color: #8c3b3b
   color: white
@@ -20,6 +32,7 @@ html, body
 
 .vs-input
   width: 100% !important
+  
 
 textarea
   resize: vertical

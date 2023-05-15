@@ -41,6 +41,12 @@ export const mutations = {
       userId,
     })
   },
+  reset(state) {
+    Object.assign(state, {
+      token: '',
+      userId: '',
+    })
+  },
 }
 
 export const actions = {}

@@ -23,18 +23,32 @@ export default {
       active3: false,
     }
   },
-  async mounted() {
+  async beforeMount() {
+    const loading = this.$vs.loading({
+      type: 'circles',
+      text: 'Загрузка...'
+    })
     await this.$store.commit('auth/initialiseStore');
     if (!this.$store.getters["auth/isSignedIn"]) {
       await this.$router.push('/login')
+      this.$vs.notification({
+        color: 'warning',
+        position: 'top-center',
+        title: 'Токен истёк',
+        text: 'Введите логин и пароль'
+      })
     } else {
       const userId = this.$store.getters["auth/getUserId"]
       this.user = await this.$userRepositoryUser.show(userId).catch(err => {
+        this.$store.commit('auth/reset');
         this.$router.push('/login')
         console.log(err)
       })
+      this.$store.commit('user/initialiseStore', {firstName: this.user.first_name, lastName: this.user.last_name})
       this.tests = await this.$moduleRepositoryUser.showList(this.user.tests)
     }
+    loading.close()
+
 
   },
   methods: {
