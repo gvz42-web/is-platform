@@ -15,4 +15,10 @@ router.delete("/:id", delete_module);
 router.post("/", create_module);
 router.put("/:id", update_module);
 
+// file upload
+
+const multer = require("multer");
+const path = require("path");
+const upload = multer({ dest: path.resolve(__dirname, "../files") });
+
 module.exports = router;

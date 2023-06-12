@@ -28,12 +28,10 @@
 <script>
 import {emails} from "@/utils/phishing";
 import {randomElement} from "@/utils/utils";
-import Tip from "@/components/user/visualizations/Tip";
 
 export default {
   name: "PhishingEmail",
   // eslint-disable-next-line vue/no-unused-components
-  components: {Tip},
   data() {
     return {
       emails,

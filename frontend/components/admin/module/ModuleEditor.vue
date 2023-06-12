@@ -26,8 +26,11 @@
           v-if="item.partType === 't'"
           v-model="item.data"
           :init="{
-        plugins: 'lists link image media preview table code wordcount lists',
+        plugins: 'lists link image media preview table code wordcount lists imagetools',
         height: '800',
+        file_picker_types: 'image',
+        automatic_uploads: true,
+        images_upload_handler: imageHandler
       }"
           api-key="26zfr8f9ktdu0vz5cyz16kumwpsh4iqivwviungkcpua4eqw"
           class="editor"
@@ -172,6 +175,11 @@ export default {
       reader.onload = () => {
         this.module.image = reader.result
       };
+    },
+    imageHandler(blobInfo, success, failure) {
+      const formData = new FormData();
+      formData.append("file", blobInfo.blob(), blobInfo.filename());
+      this.$moduleRepository.upload(formData)
     }
   }
 }
